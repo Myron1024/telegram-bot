@@ -1,0 +1,86 @@
+﻿@{
+    Layout = null;
+    var list = ViewBag.List as List<TelegramBot.WebHook.Models.MsgDataEntity>;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
+    <title>Test</title>
+    <script src="~/jquery-1.10.2.min.js"></script>
+</head>
+<body style="margin:0;padding:0;">
+    <div id="msgList" style="height:600px;overflow:scroll;border:1px solid #ccc;">
+        <ul>
+            @if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    <li><span style="color:#333;">@item.msgTime.AddHours(8) [@item.msgID|@item.isDelete]</span><p style="margin:5px 0px 5px 10px;">@item.userName : @item.msgText</p></li>
+                }
+            }
+        </ul>
+    </div>
+    <div>
+        <input type="text" id="txtMessage" name="txtMessage" placeholder="Input Message..." style="width:75%;height:30px;" />
+        <input type="button" id="btnSend" value="发送" style="width:50px;border-radius:5px;border:1px solid #2aa9f3;background-color:#2aa9f3;color:#fff;height:34px;width:20%;" />
+    </div>
+    <div style="margin-top:20px;">
+        <input type="text" id="txtMessageID" name="txtMessageID" placeholder="MessageID" style="width:75%;height:30px;" />
+        <input type="button" id="btnDelete" value="DELETE" style="width:50px;border-radius:5px;border:1px solid #2aa9f3;background-color:#2aa9f3;color:#fff;height:34px;width:20%;" />
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#btnSend").click(function () {
+                var msg = $.trim($("#txtMessage").val());
+                if (msg == "") {
+                    return;
+                } else {
+                    $.ajax({
+                        url: "/Home/TestPost",
+                        method: "POST",
+                        data: { txtMessage: msg },
+                        success: function (data) {
+                            if (data == 0 || data == "0") {
+                                window.location.reload();
+                            } else {
+                                alert('exception throwed.');
+                            }
+                        },
+                        error: function () {
+                            alert('send error');
+                        }
+                    });
+                }
+            });
+
+
+            $("#btnDelete").click(function () {
+                var msgID = $.trim($("#txtMessageID").val());
+                if (msgID == "") {
+                    return;
+                } else {
+                    $.ajax({
+                        url: "/Home/DeleteMsg",
+                        method: "POST",
+                        data: { txtMessageID: msgID },
+                        success: function (data) {
+                            if (data == 0 || data == "0") {
+                                window.location.reload();
+                            } else {
+                                alert('exception throwed.');
+                            }
+                        },
+                        error: function () {
+                            alert('send error');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
+    <title>@ViewBag.Title - Home</title>
+    <style type="text/css">
+        .txt {
+            width: 400px;
+            height: 22px;
+            line-height: 22px;
+            font-size: 16px;
+        }
+
+        .button {
+            width: 110px;
+            height: 28px;
+            border: 1px solid #000;
+            cursor: pointer;
+            background-color: lightblue;
+            color: #000;
+            border-radius: 5px;
+        }
+
+        .legend {
+            font-weight: bold;
+            color: forestgreen;
+        }
+    </style>
+</head>
+<body>
+    <h2>@ViewBag.Title</h2>
+    <fieldset style="border:1px solid #ccc;">
+        <legend class="legend">WebHook被动接收方式监听</legend>
+
+        <h3 style="word-break:break-all;">当前Bot WebHook信息：<br />@ViewBag.WebHookInfo</h3>
+
+        <div style="line-height:40px;">
+            <form action="/Home/SetWebhook" method="post" style="display:inline-block;">
+                Url：<input id="webhook" name="webhook" type="text" value="https://t.yirangyt.cn/Update/PostMsg" readonly="readonly" class="txt" style="background-color: lightgray;cursor:not-allowed;" />
+                <input type="submit" value="设置WebHook" class="button" onmouseover="this.style.color='red'" onmouseout="this.style.color='#000'" />
+            </form>
+
+            <form action="/Home/DeleteWebhook" method="post" style="display:inline-block;">
+                <input type="submit" value="删除WebHook" class="button" onmouseover="this.style.color='red'" onmouseout="this.style.color='#000'" />
+            </form>
+            <span style="display:block;font-size:13px;color:blueviolet;">设置了webhook后，getUpdates方式将失效。当Bot收到消息时，telegram将会向设置的webhook地址发送请求</span>
+        </div>
+    </fieldset>
+    <fieldset style="border:1px solid #ccc;margin-top:20px; /*display:none;*/">
+        <legend class="legend">getUpdates主动请求方式监听</legend>
+
+        <h3 style="word-break:break-all;">当前Bot 是否在接收updates：<span style="color:red;">@ViewBag.IsReceiving</span></h3>
+        <span style="display:block;font-size:13px;color:blueviolet;margin-bottom:10px;">为True时Bot可接收到消息，并作出响应。为False时，则表示Bot无法收到消息</span>
+
+        <div style="line-height:40px;">
+            <form action="/Home/getUpdates" method="post" style="display:inline-block;" target="_blank">
+                <input type="submit" value="开启监听" class="button" onmouseover="this.style.color='red'" onmouseout="this.style.color='#000'" />
+            </form>
+            <form action="/Home/StopGetUpdates" method="post" style="display:inline-block;" target="_blank">
+                <input type="submit" value="关闭监听" class="button" onmouseover="this.style.color='red'" onmouseout="this.style.color='#000'" />
+            </form>
+            <span style="display:block;font-size:13px;color:blueviolet;">Long Poll方式主动请求Telegram端获取更新，收到消息即刻返回</span>
+        </div>
+    </fieldset>
+    <fieldset style="border:1px solid #ccc;margin-top:20px;">
+        <legend class="legend">MD5Hash （测试用）</legend>
+        <div style="line-height:40px;">
+            <form action="/Home/MD5Hash" method="post" target="_blank">
+                <input id="txtStr" name="txtStr" type="text" class="txt" />
+                <input type="submit" value="MD5Hash" class="button" onmouseover="this.style.color='red'" onmouseout="this.style.color='#000'" />
+            </form>
+        </div>
+    </fieldset>
+</body>
+</html>
