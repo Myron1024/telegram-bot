@@ -374,8 +374,17 @@ namespace TelegramBot.WebHook.Services
                         }
                         break;
                     default:
-                        string usage22 = "未能识别的指令，请输入 /help 查看所有指令";
-                        await Bot.SendTextMessageAsync(chatID, usage22, parseMode: ParseMode.Default, replyMarkup: new ReplyKeyboardRemove());
+                        int forId = message.ForwardFrom?.Id ?? 0;
+                        string forName = message.ForwardFrom?.Username ?? "";
+                        if (forId != 0)
+                        {
+                            await Bot.SendTextMessageAsync(message.Chat.Id, "该消息转自用户ID：<a href=\"tg://user?id=" + forId + "\">" + forId + "</a>，username: @" + forName, ParseMode.Html, replyToMessageId: msgID);
+                        }
+                        else
+                        {
+                            string usage22 = "未能识别的指令，请输入 /help 查看所有指令";
+                            await Bot.SendTextMessageAsync(chatID, usage22, parseMode: ParseMode.Default, replyMarkup: new ReplyKeyboardRemove());
+                        }
                         break;
                 }
 
